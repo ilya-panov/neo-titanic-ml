@@ -1,4 +1,9 @@
 #
+# CMake
+#
+build/
+
+#
 # Generated files
 #
 *.pyc
