@@ -1,4 +1,4 @@
-#include "tools/preparation/utility.h"
+#include "utility.h"
 
 using std::string;
 using std::vector;
@@ -7,7 +7,7 @@ using std::vector;
 namespace neotitanicml {
 
 
-void split_string(const string& str,
+void SplitString(const string& str,
                   const string& delimiter,
                   vector<string>& fields_out) {
 

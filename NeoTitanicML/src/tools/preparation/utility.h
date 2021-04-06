@@ -13,9 +13,9 @@ namespace neotitanicml {
  * @param [in] delimiter разделитель
  * @param [out] fields_out полученный вектор строк
  */
-void split_string(const std::string& str,
-                  const std::string& delimiter,
-                  std::vector<std::string>& fields_out);
+void SplitString(const std::string& str,
+                 const std::string& delimiter,
+                 std::vector<std::string>& fields_out);
 
 
 } // namespace neotitanicml

@@ -1,4 +1,4 @@
-#include "tools/preparation/csv_reader.h"
+#include "csv_reader.h"
 
 #include <fstream>
 #include <sstream>
@@ -35,7 +35,7 @@ bool CsvReader::Next(vector<string>& fields_out) {
         return false;
     }
 
-    split_string(line_, sep_, fields_out);
+    SplitString(line_, sep_, fields_out);
     return true;
 }
 

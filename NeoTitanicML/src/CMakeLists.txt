@@ -11,11 +11,14 @@ set(TRAIN train)
 # Model (shared lib)
 #
 set(MODEL_SOURCES
-    model/data/passenger_info_parser.cc
+    model/data/passenger_info_converter.cc
+    model/data/preprocessing/label_encoder.cc
 )
 
 set(MODEL_HEADERS
     model/data/passenger_info.h
+    model/data/passenger_info_converter.h
+    model/data/preprocessing/label_encoder.h
 )
 
 add_library(${MODEL} STATIC ${MODEL_SOURCES} ${MODEL_HEADERS})

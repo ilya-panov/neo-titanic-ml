@@ -9,10 +9,12 @@ set(SOURCES
     main.cc
     tools/preparation/utility_test.cc
     tools/preparation/csv_reader_test.cc
+    model/data/preprocessing/label_encoder_test.cc
 )
 
 add_executable(${TEST} ${SOURCES})
 
 add_test(NAME ${TEST} COMMAND ${TEST})
 
-target_link_libraries(${TEST} ${PROJECT_NAME} GTest::gtest ${PREP_LIB})
+message(${TEST})
+target_link_libraries(${TEST} ${PROJECT_NAME} GTest::GTest ${PREP_LIB})

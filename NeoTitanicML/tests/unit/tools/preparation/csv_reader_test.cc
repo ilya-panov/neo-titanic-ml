@@ -11,7 +11,7 @@ using namespace neotitanicml;
 
 TEST(CsvReaderTest, Init_test) {
 
-    CsvReader reader1("no-exit-file.csv");
+    CsvReader reader1("no-exist-file.csv");
 
     EXPECT_FALSE(reader1.Init());
 
