@@ -1,8 +1,8 @@
 #ifndef NEOTITANICML_TOOLS_PREP_UTILITY_H_
 #define NEOTITANICML_TOOLS_PREP_UTILITY_H_
 
-#include <string>
-#include <vector>
+#include "common.h"
+
 
 namespace neotitanicml {
 

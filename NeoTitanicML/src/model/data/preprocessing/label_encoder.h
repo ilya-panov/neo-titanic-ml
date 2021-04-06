@@ -1,9 +1,9 @@
 #ifndef NEOTITANICML_MODEL_DATA_PREPROC_LABELENCODER_H_
 #define NEOTITANICML_MODEL_DATA_PREPROC_LABELENCODER_H_
 
-#include <string>
-#include <vector>
 #include <map>
+
+#include "common.h"
 
 
 namespace neotitanicml {
@@ -20,7 +20,7 @@ public:
      * 
      * @param labels Список меток
      */
-    LabelEncoder(std::vector<std::string> labels);
+    LabelEncoder(const std::vector<std::string>& labels);
 
     /**
      * Трансформировать метку в числовое представление
@@ -29,7 +29,7 @@ public:
      * @return Если метка известна, то вернётся целое число [0, ...].
      *         Если метка неизвестна, то вернётся -1.
      */
-    int Transform(std::string label);
+    int Transform(const std::string& label);
 
 private:
 

@@ -10,6 +10,7 @@ set(SOURCES
     tools/preparation/utility_test.cc
     tools/preparation/csv_reader_test.cc
     model/data/preprocessing/label_encoder_test.cc
+    model/data/preprocessing/standart_scaler_test.cc
 )
 
 add_executable(${TEST} ${SOURCES})

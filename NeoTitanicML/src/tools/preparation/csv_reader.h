@@ -1,9 +1,10 @@
 #ifndef NEOTITANICML_TOOLS_PREP_CSVREADER_H_
 #define NEOTITANICML_TOOLS_PREP_CSVREADER_H_
 
-#include <string>
-#include <vector>
 #include <iostream>
+
+#include "common.h"
+
 
 namespace neotitanicml {
 

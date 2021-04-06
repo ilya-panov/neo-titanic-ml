@@ -13,15 +13,21 @@ set(TRAIN train)
 set(MODEL_SOURCES
     model/data/passenger_info_converter.cc
     model/data/preprocessing/label_encoder.cc
+    model/data/preprocessing/standart_scaler.cc
 )
 
 set(MODEL_HEADERS
+    common.h
     model/data/passenger_info.h
     model/data/passenger_info_converter.h
     model/data/preprocessing/label_encoder.h
+    model/data/preprocessing/standart_scaler.h
 )
 
 add_library(${MODEL} STATIC ${MODEL_SOURCES} ${MODEL_HEADERS})
+target_link_libraries(${MODEL}
+    Neo::NeoML
+)
 
 #
 # Tools: dataset prep
