@@ -3,7 +3,6 @@
 
 #include "common.h"
 
-
 namespace neotitanicml {
 
 /**
@@ -17,7 +16,6 @@ void SplitString(const std::string& str,
                  const std::string& delimiter,
                  std::vector<std::string>& fields_out);
 
-
-} // namespace neotitanicml
+}  // namespace neotitanicml
 
 #endif  // NEOTITANICML_TOOLS_PREP_UTILITY_H_

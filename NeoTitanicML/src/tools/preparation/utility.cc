@@ -3,14 +3,11 @@
 using std::string;
 using std::vector;
 
-
 namespace neotitanicml {
 
-
 void SplitString(const string& str,
-                  const string& delimiter,
-                  vector<string>& fields_out) {
-
+                 const string& delimiter,
+                 vector<string>& fields_out) {
     string::size_type pos = 0;
     string::size_type prev = 0;
     while ((pos = str.find(delimiter, prev)) != string::npos) {
@@ -22,5 +19,4 @@ void SplitString(const string& str,
     fields_out.push_back(str.substr(prev));
 }
 
-
-}
+}  // namespace neotitanicml

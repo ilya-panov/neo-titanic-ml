@@ -5,13 +5,10 @@
 
 #include "common.h"
 
-
 namespace neotitanicml {
 
 class StandartScaler {
-
-public:
-
+ public:
     /// Конструктор
     StandartScaler();
 
@@ -35,14 +32,11 @@ public:
     const NeoML::CSparseFloatVector& Transform(
         NeoML::CSparseFloatVector& vec);
 
-private:
-
+ private:
     NeoML::CSparseFloatVector mean_;
     NeoML::CSparseFloatVector std_deviation_;
-
 };
 
-} // namespace neotitanicml
-
+}  // namespace neotitanicml
 
 #endif  // NEOTITANICML_MODEL_DATA_PREPROC_LABELENCODER_H_

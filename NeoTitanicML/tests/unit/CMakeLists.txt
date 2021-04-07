@@ -9,6 +9,7 @@ set(SOURCES
     main.cc
     tools/preparation/utility_test.cc
     tools/preparation/csv_reader_test.cc
+    model/data/passenger_info_converter_test.cc
     model/data/preprocessing/label_encoder_test.cc
     model/data/preprocessing/standart_scaler_test.cc
 )

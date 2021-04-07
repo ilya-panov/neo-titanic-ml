@@ -1,29 +1,25 @@
-#include <gtest/gtest.h>
-
 #include "model/data/preprocessing/standart_scaler.h"
 
+#include <gtest/gtest.h>
+
 #include <iostream>
+
+using std::cout;
 using std::string;
 using std::vector;
-using std::cout;
 using namespace neotitanicml;
-
 
 // == REFERENCE for test in 'standart_scaler.ipynb'
 
-
-TEST (StandartScalerTest, SetMeasures) {
-
+TEST(StandartScalerTest, SetMeasures) {
     StandartScaler scaler;
 
-    EXPECT_TRUE (scaler.SetMeasures({0.15, 0.25}, {0.02, 0.05}));
-    EXPECT_FALSE (scaler.SetMeasures({0.15, 0.25, 0.6}, {0.02, 0.05}));
-    EXPECT_FALSE (scaler.SetMeasures({0.15, 0.25}, {0.02, 0.05, 0.6}));
+    EXPECT_TRUE(scaler.SetMeasures({0.15, 0.25}, {0.02, 0.05}));
+    EXPECT_FALSE(scaler.SetMeasures({0.15, 0.25, 0.6}, {0.02, 0.05}));
+    EXPECT_FALSE(scaler.SetMeasures({0.15, 0.25}, {0.02, 0.05, 0.6}));
 }
 
-
-TEST (StandartScalerTest, Transform) {
-
+TEST(StandartScalerTest, Transform) {
     StandartScaler scaler;
     scaler.SetMeasures(
         {358.33333333, 62.66666667, 6.66666667},  // mean
@@ -40,11 +36,10 @@ TEST (StandartScalerTest, Transform) {
     }
     vect = scaler.Transform(vect);
     i = 0;
-    for (float v : {-1.37653845,  0.32708852, -1.3970014}) {
-        EXPECT_NEAR (v, vect.GetValue(i), 0.001);
+    for (float v : {-1.37653845, 0.32708852, -1.3970014}) {
+        EXPECT_NEAR(v, vect.GetValue(i), 0.001);
         i++;
     }
-
 
     vect.Nullify();
     i = 0;
@@ -55,11 +50,10 @@ TEST (StandartScalerTest, Transform) {
     }
     vect = scaler.Transform(vect);
     i = 0;
-    for (float v : {0.40745538, -1.35508101,  0.50800051}) {
-        EXPECT_NEAR (v, vect.GetValue(i), 0.001);
+    for (float v : {0.40745538, -1.35508101, 0.50800051}) {
+        EXPECT_NEAR(v, vect.GetValue(i), 0.001);
         i++;
     }
-
 
     vect.Nullify();
     i = 0;
@@ -70,9 +64,8 @@ TEST (StandartScalerTest, Transform) {
     }
     vect = scaler.Transform(vect);
     i = 0;
-    for (float v : {0.96908307,  1.02799249,  0.88900089}) {
-        EXPECT_NEAR (v, vect.GetValue(i), 0.001);
+    for (float v : {0.96908307, 1.02799249, 0.88900089}) {
+        EXPECT_NEAR(v, vect.GetValue(i), 0.001);
         i++;
     }
-
 }

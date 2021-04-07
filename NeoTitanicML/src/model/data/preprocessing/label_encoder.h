@@ -5,15 +5,15 @@
 
 #include "common.h"
 
-
 namespace neotitanicml {
 
 /**
  * Кодирование строковых меток
  */
 class LabelEncoder {
-
-public:
+ public:
+    /// Конструкто
+    LabelEncoder() {}
 
     /**
      * Конструктор
@@ -31,13 +31,18 @@ public:
      */
     int Transform(const std::string& label);
 
-private:
+    /**
+     * Проверка на существование метки
+     * 
+     * @param label Метка, которую нужно проверить
+     * @return Если метка существует вернётся true
+     */
+    bool Exist(const std::string& label);
 
+ private:
     std::map<std::string, int> classes_;
 };
 
-
-} // namespace neotitanicml
-
+}  // namespace neotitanicml
 
 #endif  // NEOTITANICML_MODEL_DATA_PREPROC_LABELENCODER_H_
