@@ -27,6 +27,7 @@ set(MODEL_HEADERS
 add_library(${MODEL} STATIC ${MODEL_SOURCES} ${MODEL_HEADERS})
 target_link_libraries(${MODEL}
     Neo::NeoML
+    nlohmann_json::nlohmann_json
 )
 
 #

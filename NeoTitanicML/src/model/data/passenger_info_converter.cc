@@ -16,6 +16,52 @@ PassengerInfoConverter::PassengerInfoConverter(
     random_ = NeoML::CRandom();
 }
 
+std::unique_ptr<PassengerInfoConverter> PassengerInfoConverter::FromJson(
+    nlohmann::json json) {
+    std::unique_ptr<PassengerInfoConverter> fail;
+    PassengerInfoConverter* converter;
+
+    // == Числовые параметры
+    if ((!json.contains(kJsonExpectedFields)) ||
+        (!json.contains(kJsonMinAge)) ||
+        (!json.contains(kJsonMaxAge))) {
+        cerr << "Err parse config. No int fields: expected-fields min/max age"
+             << "\n";
+        return fail;
+    }
+
+    try {
+        converter = new PassengerInfoConverter(
+            json[kJsonExpectedFields].get<int>(),
+            json[kJsonMinAge].get<int>(),
+            json[kJsonMaxAge].get<int>());
+    } catch (std::exception e) {
+        cerr << "Err parse config: " << e.what() << "\n";
+        return fail;
+    }
+
+    // == Строковые параметры (метки)
+    if ((!json.contains(kJsonSexLabels)) ||
+        (!json.contains(kJsonEmbarkedLabels))) {
+        cerr << "Err parse config. No some labels"
+             << "\n";
+        return fail;
+    }
+
+    try {
+        LabelEncoder sex_encoder(
+            json[kJsonSexLabels].get<vector<string> >());
+        LabelEncoder embarked_encoder(
+            json[kJsonEmbarkedLabels].get<vector<string> >());
+        converter->SetEncoders(sex_encoder, embarked_encoder);
+    } catch (std::exception e) {
+        cerr << "Err parse config: " << e.what() << "\n";
+        return fail;
+    }
+
+    return std::unique_ptr<PassengerInfoConverter>(converter);
+}
+
 void PassengerInfoConverter::SetEncoders(LabelEncoder sex_encoder,
                                          LabelEncoder embarked_encoder) {
     sex_encoder_ = sex_encoder;
@@ -86,7 +132,7 @@ bool PassengerInfoConverter::ParseStrings(const vector<string>& strings,
     if (strings[8].length()) {
         info.embarked = strings[8];
     } else {
-        info.embarked = "S";
+        info.embarked = kDefaultEmbarked;
     }
 
     return true;
@@ -103,7 +149,7 @@ bool PassengerInfoConverter::ValidateInfo(const PassengerInfo& info) {
         cerr << "Err embarked " << info.embarked << not_exist << "\n";
         return false;
     }
-    if ((info.age < 0) || (info.age > 120)) {
+    if ((info.age < kMinAge) || (info.age > kMaxAge)) {
         cerr << "Err age " << info.age << not_exist << "\n";
         return false;
     }

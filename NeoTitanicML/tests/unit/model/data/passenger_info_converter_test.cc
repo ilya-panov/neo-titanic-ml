@@ -186,3 +186,46 @@ TEST_F(PassengerInfoConverterTest, Info2Vec2) {
     EXPECT_NEAR(0.0, vect.GetValue(1), 0.001);
     EXPECT_NEAR(1.0, vect.GetValue(6), 0.001);
 }
+
+TEST(PassengerInfoConverter_FromJson, T1) {
+    nlohmann::json json;
+
+    auto converter = PassengerInfoConverter::FromJson(json);
+
+    EXPECT_FALSE(converter);
+}
+
+TEST(PassengerInfoConverter_FromJson, T2) {
+    nlohmann::json json;
+
+    json["expected-fields"] = 9;
+    json["min-age"] = 0;
+    json["max-age"] = 80;
+
+    auto converter = PassengerInfoConverter::FromJson(json);
+
+    EXPECT_FALSE(converter);
+}
+
+TEST(PassengerInfoConverter_FromJson, T3) {
+    nlohmann::json json;
+
+    json["expected-fields"] = 9;
+    json["min-age"] = 0;
+    json["max-age"] = 80;
+    json["sex-labels"] = {"male", "female"};
+    json["embarked-labels"] = {"C", "S", "Q"};
+
+    auto converter = PassengerInfoConverter::FromJson(json);
+
+    EXPECT_TRUE(converter);
+
+    vector<string> strings = {
+        "177", "0", "1", "female", "50.0", "0", "0", "28.7125", "C"};
+
+    PassengerInfo info;
+
+    bool ok = converter->FromStrings(strings, info);
+
+    EXPECT_TRUE(ok);
+}

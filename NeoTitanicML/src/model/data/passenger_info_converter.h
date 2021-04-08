@@ -3,6 +3,9 @@
 
 #include <NeoML/NeoML.h>
 
+#include <memory>
+#include <nlohmann/json.hpp>
+
 #include "common.h"
 #include "model/data/preprocessing/label_encoder.h"
 #include "passenger_info.h"
@@ -11,6 +14,18 @@ namespace neotitanicml {
 
 class PassengerInfoConverter {
  public:
+
+   /**
+    * Создание парсера из json-конфига.
+    * 
+    * @param json Конфиг для парсера
+    * @return Созданный парсер. В случае успеха unique_ptr содержит указатель
+    *         на созданный объект.
+    */
+   static std::unique_ptr<PassengerInfoConverter> FromJson(nlohmann::json json);
+
+
+    // Конструктор
     PassengerInfoConverter() {}
 
     /**
@@ -75,20 +90,6 @@ class PassengerInfoConverter {
     bool ParseStrings(const std::vector<std::string>& strings,
                       PassengerInfo& info);
 };
-
-/*
-class PassengerInfoConverterFactory {
-
-public:
-
-    PassengerInfoConverterFactory();
-
-    PassengerInfoConverterFactory& FromJson(std::string json);
-
-    PassengerInfoParser build();
-
-};
-*/
 
 }  // namespace neotitanicml
 
