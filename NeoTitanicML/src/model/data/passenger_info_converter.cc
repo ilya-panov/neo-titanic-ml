@@ -12,7 +12,7 @@ namespace neotitanicml {
 PassengerInfoConverter::PassengerInfoConverter(
     int expected_fields, int min_age, int max_age) : expected_fields_(expected_fields),
                                                      min_age_(min_age),
-                                                     max_age_(max_age_) {
+                                                     max_age_(max_age) {
     random_ = NeoML::CRandom();
 }
 

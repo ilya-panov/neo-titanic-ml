@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
 
+//#include <boost/program_options.hpp>
+#include <NeoML/NeoML.h>
+
 #include <cxxopts.hpp>
 
 #include "model/agent.h"
@@ -16,12 +19,11 @@ void PrintHelp(const cxxopts::Options& options) {
 }
 
 cxxopts::ParseResult ParseArgs(int argc, char* argv[]) {
-    cxxopts::Options options("train", "Train the model");
+    cxxopts::Options options("test", "Test the model");
 
     options.add_options()
         ("h,help", "Print usage")
-        ("m,model", "Path to save model", cxxopts::value<string>())
-        ("t,train", "Train dataset", cxxopts::value<string>())
+        ("m,model", "Path to load model", cxxopts::value<string>())
         ("y,test", "Train dataset", cxxopts::value<string>())
     ;
 
@@ -34,7 +36,6 @@ cxxopts::ParseResult ParseArgs(int argc, char* argv[]) {
         }
 
         if ((!args.count("model")) ||
-            (!args.count("train")) ||
             (!args.count("test"))) {
             cerr << "ERROR: not define some arguments!"
                  << "\n\n";
@@ -54,18 +55,15 @@ cxxopts::ParseResult ParseArgs(int argc, char* argv[]) {
 int main(int argc, char* argv[]) {
     cxxopts::ParseResult args = ParseArgs(argc, argv);
     auto model_path = args["model"].as<string>();
-    auto train_path = args["train"].as<string>();
     auto test_path = args["test"].as<string>();
 
-    Agent agent(model_path, train_path, test_path);
-    if (!agent.Init()) {
-        cerr << "Error with train"
-             << "\n";
-        return 1;
-    }
+    Agent agent(model_path, test_path);
+    agent.Init();
+    agent.LoadModel();
 
-    agent.Train();
-    agent.SaveModel();
+    float accuracy = agent.Validate();
+
+    cout << "ACCURACY: " << accuracy * 100 << "\n";
 
     return 0;
 }

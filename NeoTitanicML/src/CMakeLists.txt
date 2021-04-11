@@ -5,6 +5,8 @@ set(MODEL ${PROJECT_NAME})
 set(PREPARATION preparation)
 # Tools: train model
 set(TRAIN train)
+# Tools: test model
+set(TEST test)
 
 
 #
@@ -14,6 +16,7 @@ set(MODEL_SOURCES
     model/data/passenger_info_converter.cc
     model/data/preprocessing/label_encoder.cc
     model/data/preprocessing/standart_scaler.cc
+    model/agent.cc
 )
 
 set(MODEL_HEADERS
@@ -22,6 +25,7 @@ set(MODEL_HEADERS
     model/data/passenger_info_converter.h
     model/data/preprocessing/label_encoder.h
     model/data/preprocessing/standart_scaler.h
+    model/agent.h
 )
 
 add_library(${MODEL} STATIC ${MODEL_SOURCES} ${MODEL_HEADERS})
@@ -45,7 +49,10 @@ set(PREP_HEADERS
 
 add_library(${PREP_LIB} STATIC ${PREP_SOURCES} ${PREP_HEADERS})
 add_executable(${PREPARATION} tools/preparation/main.cc)
-target_link_libraries(${PREPARATION} ${PREP_LIB} ${MODEL})
+target_link_libraries(${PREPARATION}
+    ${PREP_LIB} ${MODEL}
+    cxxopts::cxxopts
+)
 
 #
 # Tools: train model
@@ -54,15 +61,23 @@ set(TRAIN_SOURCES
     tools/train/main.cc
 )
 
-set(TRAIN_HEADERS
-    tools/train/
-)
-
 add_executable(${TRAIN} ${TRAIN_SOURCES})
 
 target_link_libraries(${TRAIN}
-    Neo::NeoMathEngine
-    Neo::NeoML
-    nlohmann_json::nlohmann_json
+    ${MODEL}
+    cxxopts::cxxopts
+)
+
+#
+# Tools: test model
+#
+set(TEST_SOURCES
+    tools/test/main.cc
+)
+
+add_executable(${TEST} ${TEST_SOURCES})
+
+target_link_libraries(${TEST}
+    ${MODEL}
     cxxopts::cxxopts
 )
