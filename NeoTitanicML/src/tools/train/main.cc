@@ -1,18 +1,18 @@
+#include <cxxopts.hpp>
 #include <iostream>
 #include <string>
-
-#include <cxxopts.hpp>
 
 #include "model/agent.h"
 
 using std::cerr;
 using std::cout;
+using std::endl;
 using std::string;
 using std::vector;
 using namespace neotitanicml;
 
 void PrintHelp(const cxxopts::Options& options) {
-    std::cout << options.help() << "\n";
+    std::cout << options.help() << endl;
 }
 
 cxxopts::ParseResult ParseArgs(int argc, char* argv[]) {
@@ -37,7 +37,8 @@ cxxopts::ParseResult ParseArgs(int argc, char* argv[]) {
             (!args.count("train")) ||
             (!args.count("test"))) {
             cerr << "ERROR: not define some arguments!"
-                 << "\n\n";
+                 << endl
+                 << endl;
             PrintHelp(options);
             std::exit(1);
         }
@@ -45,7 +46,8 @@ cxxopts::ParseResult ParseArgs(int argc, char* argv[]) {
         return args;
 
     } catch (std::exception& e) {
-        cerr << "ERROR: " << e.what() << "\n\n";
+        cerr << "ERROR: " << e.what() << endl
+             << endl;
         PrintHelp(options);
         std::exit(1);
     }
@@ -60,7 +62,7 @@ int main(int argc, char* argv[]) {
     Agent agent(model_path, train_path, test_path);
     if (!agent.Init()) {
         cerr << "Error with train"
-             << "\n";
+             << endl;
         return 1;
     }
 

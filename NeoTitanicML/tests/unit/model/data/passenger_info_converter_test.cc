@@ -12,6 +12,9 @@ using std::vector;
 using namespace neotitanicml;
 using namespace NeoML;
 
+namespace neotitanicml
+{
+
 class PassengerInfoConverterTest : public ::testing::Test {
  protected:
     PassengerInfoConverter converter;
@@ -229,3 +232,5 @@ TEST(PassengerInfoConverter_FromJson, T3) {
 
     EXPECT_TRUE(ok);
 }
+
+} // namespace neotitanicml

@@ -5,25 +5,25 @@
 
 namespace neotitanicml {
 
-const int kMinAge = 0;
-const int kMaxAge = 120;
-const std::string kDefaultEmbarked = "S";
+static const int kMinAge = 0;
+static const int kMaxAge = 120;
+static const std::string kDefaultEmbarked = "S";
 
-const std::string kJsonExpectedFields = "expected-fields";
-const std::string kJsonMinAge = "min-age";
-const std::string kJsonMaxAge = "max-age";
-const std::string kJsonSexLabels = "sex-labels";
-const std::string kJsonEmbarkedLabels = "embarked-labels";
+static const std::string kJsonExpectedFields = "expected-fields";
+static const std::string kJsonMinAge = "min-age";
+static const std::string kJsonMaxAge = "max-age";
+static const std::string kJsonSexLabels = "sex-labels";
+static const std::string kJsonEmbarkedLabels = "embarked-labels";
 
 struct PassengerInfo {
+    std::string sex;
+    std::string embarked;
     int surviveded;
     int pclass;
-    std::string sex;
     int age;
     int sib_sp;
     int parch;
     float fare;
-    std::string embarked;
 };
 
 }  // namespace neotitanicml

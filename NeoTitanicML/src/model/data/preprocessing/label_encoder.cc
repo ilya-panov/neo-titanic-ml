@@ -13,7 +13,7 @@ LabelEncoder::LabelEncoder(const vector<string>& labels) {
     }
 }
 
-int LabelEncoder::Transform(const string& label) {
+int LabelEncoder::Transform(const string& label) const {
     if (classes_.count(label)) {
         return classes_.at(label);
     }
@@ -21,7 +21,7 @@ int LabelEncoder::Transform(const string& label) {
     return -1;
 }
 
-bool LabelEncoder::Exist(const std::string& label) {
+bool LabelEncoder::Exist(const std::string& label) const {
     if (classes_.count(label)) {
         return true;
     }

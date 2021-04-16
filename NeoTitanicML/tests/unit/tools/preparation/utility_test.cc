@@ -9,20 +9,20 @@ using namespace neotitanicml;
 TEST(UtilityTest, split_string_test) {
     vector<string> fields;
 
-    SplitString("123;456", ";", fields);
+    fields = SplitString("123;456", ";");
 
     EXPECT_EQ(2, fields.size());
     EXPECT_EQ("123", fields[0]);
     EXPECT_EQ("456", fields[1]);
 
     fields.clear();
-    SplitString("123;456", ",", fields);
+    fields = SplitString("123;456", ",");
 
     EXPECT_EQ(1, fields.size());
     EXPECT_EQ("123;456", fields[0]);
 
     fields.clear();
-    SplitString("", ",", fields);
+    fields = SplitString("", ",");
 
     EXPECT_EQ(1, fields.size());
     EXPECT_EQ("", fields[0]);

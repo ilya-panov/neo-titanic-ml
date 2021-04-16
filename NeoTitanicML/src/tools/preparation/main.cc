@@ -12,6 +12,7 @@
 
 using std::cerr;
 using std::cout;
+using std::endl;
 using std::string;
 using std::unique_ptr;
 using std::vector;
@@ -19,7 +20,7 @@ using namespace neotitanicml;
 using namespace NeoML;
 
 void PrintHelp(const cxxopts::Options& options) {
-    std::cout << options.help() << "\n";
+    cout << options.help() << endl;
 }
 
 cxxopts::ParseResult ParseArgs(int argc, char* argv[]) {
@@ -46,7 +47,8 @@ cxxopts::ParseResult ParseArgs(int argc, char* argv[]) {
             (!args.count("source")) ||
             (!args.count("destination"))) {
             cerr << "ERROR: not define some arguments!"
-                 << "\n\n";
+                 << endl
+                 << endl;
             PrintHelp(options);
             std::exit(1);
         }
@@ -57,7 +59,8 @@ cxxopts::ParseResult ParseArgs(int argc, char* argv[]) {
         return args;
 
     } catch (std::exception& e) {
-        cerr << "ERROR: " << e.what() << "\n\n";
+        cerr << "ERROR: " << e.what() << endl
+             << endl;
         PrintHelp(options);
         std::exit(1);
     }
@@ -71,7 +74,7 @@ nlohmann::json ReadConfig(const string& config_file) {
         config = nlohmann::json::parse(config_file_stream);
         config_file_stream.close();
     } catch (nlohmann::detail::parse_error& pe) {
-        cerr << "JSON_PARSER_ERROR: " << pe.what() << "\n";
+        cerr << "JSON_PARSER_ERROR: " << pe.what() << endl;
         std::exit(1);
     }
 
@@ -81,7 +84,7 @@ nlohmann::json ReadConfig(const string& config_file) {
 unique_ptr<CsvReader> PrepareReader(const string& source_file, const string& sep) {
     auto reader = unique_ptr<CsvReader>(new CsvReader(source_file, sep));
     if (!reader->Init()) {
-        cerr << "ERROR: Can't open file: " << source_file << "\n";
+        cerr << "ERROR: Can't open file: " << source_file << endl;
         std::exit(1);
     }
     // skip first line (header)
@@ -91,10 +94,10 @@ unique_ptr<CsvReader> PrepareReader(const string& source_file, const string& sep
 }
 
 unique_ptr<PassengerInfoConverter> PrepareConverter(const nlohmann::json& config) {
-    auto converter = PassengerInfoConverter::FromJson(config);
+    unique_ptr<PassengerInfoConverter> converter = PassengerInfoConverter::FromJson(config);
     if (!converter) {
         cerr << "ERROR: Can't configure converter: "
-             << "\n";
+             << endl;
         std::exit(1);
     }
 
@@ -111,7 +114,7 @@ unique_ptr<StandartScaler> PrepareStdScaler(const nlohmann::json& config) {
             throw std::invalid_argument("bad mean and std");
         };
     } catch (std::exception& e) {
-        cerr << "ERROR: Can't configure scaler: " << e.what() << "\n";
+        cerr << "ERROR: Can't configure scaler: " << e.what() << endl;
         std::exit(1);
     }
 
@@ -128,7 +131,7 @@ void StoreDataset(CPtr<CMemoryProblem> dataset, const string& path) {
         archive.Close();
         archive_file.Close();
     } catch (std::exception& e) {
-        cerr << "Error during save dataset: " << e.what() << "\n";
+        cerr << "Error during save dataset: " << e.what() << endl;
     }
 }
 
@@ -159,7 +162,7 @@ int main(int argc, char* argv[]) {
         bool success = converter->FromStrings(fields, info);
 
         if (!success) {
-            cout << "Bad line: " << count << "\n";
+            cout << "Bad line: " << count << endl;
             continue;
         }
 
@@ -170,7 +173,7 @@ int main(int argc, char* argv[]) {
         dataset->Add(vect, class_id);
     }
 
-    cout << "Vectors prepared: " << dataset->GetVectorCount() << "\n";
+    cout << "Vectors prepared: " << dataset->GetVectorCount() << endl;
 
     StoreDataset(dataset, destination_file);
 

@@ -3,6 +3,7 @@
 #include <iostream>
 
 using std::cerr;
+using std::endl;
 using std::string;
 using std::vector;
 using namespace NeoML;
@@ -18,34 +19,33 @@ PassengerInfoConverter::PassengerInfoConverter(
 
 std::unique_ptr<PassengerInfoConverter> PassengerInfoConverter::FromJson(
     nlohmann::json json) {
-    std::unique_ptr<PassengerInfoConverter> fail;
-    PassengerInfoConverter* converter;
+    std::unique_ptr<PassengerInfoConverter> converter;
 
     // == Числовые параметры
     if ((!json.contains(kJsonExpectedFields)) ||
         (!json.contains(kJsonMinAge)) ||
         (!json.contains(kJsonMaxAge))) {
         cerr << "Err parse config. No int fields: expected-fields min/max age"
-             << "\n";
-        return fail;
+             << endl;
+        return nullptr;
     }
 
     try {
-        converter = new PassengerInfoConverter(
+        converter = std::unique_ptr<PassengerInfoConverter>(new PassengerInfoConverter(
             json[kJsonExpectedFields].get<int>(),
             json[kJsonMinAge].get<int>(),
-            json[kJsonMaxAge].get<int>());
-    } catch (std::exception e) {
-        cerr << "Err parse config: " << e.what() << "\n";
-        return fail;
+            json[kJsonMaxAge].get<int>()));
+    } catch (std::exception& e) {
+        cerr << "Err parse config: " << e.what() << endl;
+        return nullptr;
     }
 
     // == Строковые параметры (метки)
     if ((!json.contains(kJsonSexLabels)) ||
         (!json.contains(kJsonEmbarkedLabels))) {
         cerr << "Err parse config. No some labels"
-             << "\n";
-        return fail;
+             << endl;
+        return nullptr;
     }
 
     try {
@@ -55,17 +55,11 @@ std::unique_ptr<PassengerInfoConverter> PassengerInfoConverter::FromJson(
             json[kJsonEmbarkedLabels].get<vector<string> >());
         converter->SetEncoders(sex_encoder, embarked_encoder);
     } catch (std::exception e) {
-        cerr << "Err parse config: " << e.what() << "\n";
-        return fail;
+        cerr << "Err parse config: " << e.what() << endl;
+        return nullptr;
     }
 
-    return std::unique_ptr<PassengerInfoConverter>(converter);
-}
-
-void PassengerInfoConverter::SetEncoders(LabelEncoder sex_encoder,
-                                         LabelEncoder embarked_encoder) {
-    sex_encoder_ = sex_encoder;
-    embarked_encoder_ = embarked_encoder;
+    return converter;
 }
 
 bool PassengerInfoConverter::FromStrings(const vector<string>& strings,
@@ -83,19 +77,19 @@ bool PassengerInfoConverter::ParseStrings(const vector<string>& strings,
     if (strings.size() != expected_fields_) {
         cerr << "WARN: bad fields count: expected='" << expected_fields_
              << "' exist='" << strings.size() << "'"
-             << "\n";
+             << endl;
         return false;
     }
 
     if (!Str2Int(strings[1], info.surviveded)) {
         cerr << "Err with surviveded"
-             << "\n";
+             << endl;
         return false;
     }
 
     if (!Str2Int(strings[2], info.pclass)) {
         cerr << "Err with pclass"
-             << "\n";
+             << endl;
         return false;
     }
 
@@ -103,7 +97,7 @@ bool PassengerInfoConverter::ParseStrings(const vector<string>& strings,
         info.sex = strings[3];
     } else {
         cerr << "Err with sex"
-             << "\n";
+             << endl;
         return false;
     }
 
@@ -113,19 +107,19 @@ bool PassengerInfoConverter::ParseStrings(const vector<string>& strings,
 
     if (!Str2Int(strings[5], info.sib_sp)) {
         cerr << "Err with sib_sp"
-             << "\n";
+             << endl;
         return false;
     }
 
     if (!Str2Int(strings[6], info.parch)) {
         cerr << "Err with sib_sp"
-             << "\n";
+             << endl;
         return false;
     }
 
     if (!Str2Float(strings[7], info.fare)) {
         cerr << "Err with fare"
-             << "\n";
+             << endl;
         return false;
     }
 
@@ -138,19 +132,25 @@ bool PassengerInfoConverter::ParseStrings(const vector<string>& strings,
     return true;
 }
 
-bool PassengerInfoConverter::ValidateInfo(const PassengerInfo& info) {
-    string not_exist = " does not exist";
+void PassengerInfoConverter::SetEncoders(LabelEncoder sex_encoder,
+                                         LabelEncoder embarked_encoder) {
+    sex_encoder_ = sex_encoder;
+    embarked_encoder_ = embarked_encoder;
+}
+
+bool PassengerInfoConverter::ValidateInfo(const PassengerInfo& info) const {
+    static const string not_exist = " does not exist";
 
     if (!sex_encoder_.Exist(info.sex)) {
-        cerr << "Err sex " << info.sex << not_exist << "\n";
+        cerr << "Err sex " << info.sex << not_exist << endl;
         return false;
     }
     if (!embarked_encoder_.Exist(info.embarked)) {
-        cerr << "Err embarked " << info.embarked << not_exist << "\n";
+        cerr << "Err embarked " << info.embarked << not_exist << endl;
         return false;
     }
     if ((info.age < kMinAge) || (info.age > kMaxAge)) {
-        cerr << "Err age " << info.age << not_exist << "\n";
+        cerr << "Err age " << info.age << not_exist << endl;
         return false;
     }
 
@@ -158,7 +158,7 @@ bool PassengerInfoConverter::ValidateInfo(const PassengerInfo& info) {
 }
 
 int PassengerInfoConverter::Info2Vec(const PassengerInfo& info,
-                                     CSparseFloatVector& vect) {
+                                     CSparseFloatVector& vect) const {
     vector<float> floats = {
         static_cast<float>(info.pclass),
         static_cast<float>(sex_encoder_.Transform(info.sex)),
@@ -177,22 +177,22 @@ int PassengerInfoConverter::Info2Vec(const PassengerInfo& info,
     return info.surviveded;
 }
 
-bool PassengerInfoConverter::Str2Int(const string& str, int& i) {
+bool PassengerInfoConverter::Str2Int(const string& str, int& i) const {
     try {
         i = std::stoi(str, nullptr);
         return true;
     } catch (std::invalid_argument e) {
-        //cerr << "Err: " << e.what() << "\n";
+        //cerr << "Err: " << e.what() << endl;
         return false;
     }
 }
 
-bool PassengerInfoConverter::Str2Float(const string& str, float& f) {
+bool PassengerInfoConverter::Str2Float(const string& str, float& f) const {
     try {
         f = std::stof(str, nullptr);
         return true;
     } catch (std::invalid_argument e) {
-        //cerr << "Err: " << e.what() << "\n";
+        //cerr << "Err: " << e.what() << endl;
         return false;
     }
 }

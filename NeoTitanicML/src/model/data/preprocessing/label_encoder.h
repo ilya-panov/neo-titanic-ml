@@ -10,7 +10,7 @@ namespace neotitanicml {
 /**
  * Кодирование строковых меток
  */
-class LabelEncoder {
+class LabelEncoder final {
  public:
     /// Конструкто
     LabelEncoder() {}
@@ -29,7 +29,7 @@ class LabelEncoder {
      * @return Если метка известна, то вернётся целое число [0, ...].
      *         Если метка неизвестна, то вернётся -1.
      */
-    int Transform(const std::string& label);
+    int Transform(const std::string& label) const;
 
     /**
      * Проверка на существование метки
@@ -37,7 +37,7 @@ class LabelEncoder {
      * @param label Метка, которую нужно проверить
      * @return Если метка существует вернётся true
      */
-    bool Exist(const std::string& label);
+    bool Exist(const std::string& label) const;
 
  private:
     std::map<std::string, int> classes_;

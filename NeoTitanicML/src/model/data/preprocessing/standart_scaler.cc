@@ -16,14 +16,14 @@ bool StandartScaler::SetMeasures(const vector<float>& mean,
                                  const vector<float>& std_deviation) {
     if (mean.size() != std_deviation.size()) {
         cerr << "Err: mean and std deviation have different size"
-             << "\n";
+             << std::endl;
         return false;
     }
 
     mean_.Nullify();
     std_deviation_.Nullify();
 
-    int size = mean.size();
+    size_t size = mean.size();
     for (int i = 0; i < size; i++) {
         mean_.SetAt(i, mean[i]);
         std_deviation_.SetAt(i, std_deviation[i]);
@@ -32,7 +32,7 @@ bool StandartScaler::SetMeasures(const vector<float>& mean,
     return true;
 }
 
-const CSparseFloatVector& StandartScaler::Transform(CSparseFloatVector& vec) {
+const CSparseFloatVector& StandartScaler::Transform(CSparseFloatVector& vec) const {
     vec -= mean_;
     vec.DivideBy(std_deviation_);
     return vec;

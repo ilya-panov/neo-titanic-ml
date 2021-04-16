@@ -12,39 +12,18 @@
 
 namespace neotitanicml {
 
-class PassengerInfoConverter {
- public:
+class PassengerInfoConverter final {
+    friend class PassengerInfoConverterTest;
 
-   /**
+ public:
+    /**
     * Создание парсера из json-конфига.
     * 
     * @param json Конфиг для парсера
     * @return Созданный парсер. В случае успеха unique_ptr содержит указатель
-    *         на созданный объект.
+    *         на созданный объект, иначе - nullptr.
     */
-   static std::unique_ptr<PassengerInfoConverter> FromJson(nlohmann::json json);
-
-
-    // Конструктор
-    PassengerInfoConverter() {}
-
-    /**
-     * Конструктор
-     * 
-     * @param expected_fields Ожидаемое коичество полей
-     * @param min_age минимальный возраст - минимальная граница
-     *                для случайного выбора
-     * @param max_age максимальный возраст
-     */
-    PassengerInfoConverter(int expected_fields, int min_age, int max_age);
-
-    /**
-     * Задать кодировщики
-     * 
-     * @param sex_encoder Пол
-     * @param embarked_encoder Подобранный
-     */
-    void SetEncoders(LabelEncoder sex_encoder, LabelEncoder embarked_encoder);
+    static std::unique_ptr<PassengerInfoConverter> FromJson(nlohmann::json json);
 
     /**
      * Конвертировать вектор строк в структуру информации
@@ -62,7 +41,7 @@ class PassengerInfoConverter {
      * @param info Структура для проверки
      * @return Если данны корректны, то вернётся true
      */
-    bool ValidateInfo(const PassengerInfo& info);
+    bool ValidateInfo(const PassengerInfo& info) const;
 
     /**
      * Перевести PassengerInfo в NeoML-вектор
@@ -73,7 +52,7 @@ class PassengerInfoConverter {
      * 
      * Необходимо, чтобы структура info сначала прошла валидацию!
      */
-    int Info2Vec(const PassengerInfo& info, NeoML::CSparseFloatVector& vect);
+    int Info2Vec(const PassengerInfo& info, NeoML::CSparseFloatVector& vect) const;
 
  private:
     int expected_fields_;
@@ -85,10 +64,24 @@ class PassengerInfoConverter {
     LabelEncoder sex_encoder_;
     LabelEncoder embarked_encoder_;
 
-    bool Str2Int(const std::string& str, int& i);
-    bool Str2Float(const std::string& str, float& f);
+    // Конструктор
+    PassengerInfoConverter() : PassengerInfoConverter(0, 0, 0) {}
+
+    /**
+     * Конструктор
+     * 
+     * @param expected_fields Ожидаемое коичество полей
+     * @param min_age минимальный возраст - минимальная граница
+     *                для случайного выбора
+     * @param max_age максимальный возраст
+     */
+    PassengerInfoConverter(int expected_fields, int min_age, int max_age);
+
+    bool Str2Int(const std::string& str, int& i) const;
+    bool Str2Float(const std::string& str, float& f) const;
     bool ParseStrings(const std::vector<std::string>& strings,
                       PassengerInfo& info);
+    void SetEncoders(LabelEncoder sex_encoder, LabelEncoder embarked_encoder);
 };
 
 }  // namespace neotitanicml

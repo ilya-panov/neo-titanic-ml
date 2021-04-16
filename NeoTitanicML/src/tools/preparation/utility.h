@@ -10,11 +10,10 @@ namespace neotitanicml {
  * 
  * @param [in] str исходная строка
  * @param [in] delimiter разделитель
- * @param [out] fields_out полученный вектор строк
+ * @return полученный вектор строк
  */
-void SplitString(const std::string& str,
-                 const std::string& delimiter,
-                 std::vector<std::string>& fields_out);
+std::vector<std::string> SplitString(const std::string& str,
+                                     const std::string& delimiter);
 
 }  // namespace neotitanicml
 

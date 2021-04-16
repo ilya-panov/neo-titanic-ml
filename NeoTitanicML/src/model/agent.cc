@@ -4,6 +4,7 @@
 
 using std::cerr;
 using std::cout;
+using std::endl;
 using std::string;
 
 namespace neotitanicml {
@@ -13,7 +14,7 @@ bool Agent::Init() {
         train_dataset_ = new CMemoryProblem();
         if (!LoadDataset(train_dataset_, train_dataset_path_)) {
             cerr << "Can't load train dataset"
-                 << "\n";
+                 << endl;
             return false;
         }
     }
@@ -21,7 +22,7 @@ bool Agent::Init() {
         test_dataset_ = new CMemoryProblem();
         if (!LoadDataset(test_dataset_, test_dataset_path_)) {
             cerr << "Can't load test dataset"
-                 << "\n";
+                 << endl;
             return false;
         }
     }
@@ -29,7 +30,7 @@ bool Agent::Init() {
     return true;
 }
 
-bool Agent::SaveModel() {
+bool Agent::SaveModel() const {
     try {
         CArchiveFile archive_file(model_path_.c_str(), CArchive::store);
         CArchive archive(&archive_file, CArchive::SD_Storing);
@@ -41,7 +42,7 @@ bool Agent::SaveModel() {
         archive.Close();
         archive_file.Close();
     } catch (std::exception& e) {
-        cerr << "Error during save model: " << e.what() << "\n";
+        cerr << "Error during save model: " << e.what() << endl;
         return false;
     }
     return true;
@@ -61,7 +62,7 @@ bool Agent::LoadModel() {
         archive.Close();
         archive_file.Close();
     } catch (std::exception& e) {
-        cerr << "Error during load model: " << e.what() << "\n";
+        cerr << "Error during load model: " << e.what() << endl;
         return false;
     }
     return true;
@@ -80,15 +81,15 @@ void Agent::Train() {
     float train_score = Validate(train_dataset_);
     float test_score = Validate(test_dataset_);
 
-    cout << "Train accuracy: " << train_score * 100 << "\n";
-    cout << "Test accuracy: " << test_score * 100 << "\n";
+    cout << "Train accuracy: " << train_score * 100 << endl;
+    cout << "Test accuracy: " << test_score * 100 << endl;
 }
 
-float Agent::Validate() {
+float Agent::Validate() const {
     return Validate(test_dataset_);
 }
 
-float Agent::Validate(CPtr<CMemoryProblem> dataset) {
+float Agent::Validate(CPtr<CMemoryProblem> dataset) const {
     int correct = 0;
     for (int i = 0; i < dataset->GetVectorCount(); i++) {
         CClassificationResult result;
@@ -113,7 +114,7 @@ bool Agent::LoadDataset(CPtr<CMemoryProblem> dataset, const string& path) {
         archive.Close();
         archive_file.Close();
     } catch (std::exception& e) {
-        cerr << "Error during load dataset: " << e.what() << "\n";
+        cerr << "Error during load dataset: " << e.what() << endl;
         return false;
     }
     return true;

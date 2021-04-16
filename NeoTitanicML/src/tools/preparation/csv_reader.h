@@ -11,7 +11,7 @@ namespace neotitanicml {
 /**
  * Чтение csv-файла и разбиение строк согласно разделителю
  */
-class CsvReader {
+class CsvReader final {
  public:
     /**
      * Конструктор

@@ -10,12 +10,13 @@
 
 using std::cerr;
 using std::cout;
+using std::endl;
 using std::string;
 using std::vector;
 using namespace neotitanicml;
 
 void PrintHelp(const cxxopts::Options& options) {
-    std::cout << options.help() << "\n";
+    std::cout << options.help() << endl;
 }
 
 cxxopts::ParseResult ParseArgs(int argc, char* argv[]) {
@@ -38,7 +39,8 @@ cxxopts::ParseResult ParseArgs(int argc, char* argv[]) {
         if ((!args.count("model")) ||
             (!args.count("test"))) {
             cerr << "ERROR: not define some arguments!"
-                 << "\n\n";
+                 << endl
+                 << endl;
             PrintHelp(options);
             std::exit(1);
         }
@@ -46,7 +48,8 @@ cxxopts::ParseResult ParseArgs(int argc, char* argv[]) {
         return args;
 
     } catch (std::exception& e) {
-        cerr << "ERROR: " << e.what() << "\n\n";
+        cerr << "ERROR: " << e.what() << endl
+             << endl;
         PrintHelp(options);
         std::exit(1);
     }
@@ -63,7 +66,7 @@ int main(int argc, char* argv[]) {
 
     float accuracy = agent.Validate();
 
-    cout << "ACCURACY: " << accuracy * 100 << "\n";
+    cout << "ACCURACY: " << accuracy * 100 << std::endl;
 
     return 0;
 }

@@ -7,11 +7,8 @@
 
 namespace neotitanicml {
 
-class Agent {
+class Agent final {
  public:
-    /// Конструкто
-    Agent() {}
-
     /**
      * Конструктор для проверки модели на датасете
      * 
@@ -54,7 +51,7 @@ class Agent {
      * 
      * @return В случае успеха true 
      */
-    bool SaveModel();
+    bool SaveModel() const;
 
     /**
      * Обучение модели на представлнных данных
@@ -66,14 +63,14 @@ class Agent {
      * 
      * @return Значение выбранной меры качества (по-умолчанию accuracy)
      */
-    float Validate();
+    float Validate() const;
 
     /**
      * Валидация на указанном датасете
      * 
      * @return Значение выбранной меры качества (по-умолчанию accuracy)
      */
-    float Validate(CPtr<CMemoryProblem> dataset);
+    float Validate(CPtr<CMemoryProblem> dataset) const;
 
  private:
     // Загрузить датасет из файла

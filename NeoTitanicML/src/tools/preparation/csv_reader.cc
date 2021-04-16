@@ -28,7 +28,7 @@ bool CsvReader::Next(vector<string>& fields_out) {
         return false;
     }
 
-    SplitString(line_, sep_, fields_out);
+    fields_out = SplitString(line_, sep_);
     return true;
 }
 

@@ -7,7 +7,7 @@
 
 namespace neotitanicml {
 
-class StandartScaler {
+class StandartScaler final {
  public:
     /// Конструктор
     StandartScaler();
@@ -30,7 +30,7 @@ class StandartScaler {
      * @return отскалированный вектор
      */
     const NeoML::CSparseFloatVector& Transform(
-        NeoML::CSparseFloatVector& vec);
+        NeoML::CSparseFloatVector& vec) const;
 
  private:
     NeoML::CSparseFloatVector mean_;
