@@ -64,9 +64,6 @@ class PassengerInfoConverter final {
     LabelEncoder sex_encoder_;
     LabelEncoder embarked_encoder_;
 
-    // Конструктор
-    PassengerInfoConverter() : PassengerInfoConverter(0, 0, 0) {}
-
     /**
      * Конструктор
      * 

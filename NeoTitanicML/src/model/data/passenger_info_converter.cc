@@ -54,7 +54,7 @@ std::unique_ptr<PassengerInfoConverter> PassengerInfoConverter::FromJson(
         LabelEncoder embarked_encoder(
             json[kJsonEmbarkedLabels].get<vector<string> >());
         converter->SetEncoders(sex_encoder, embarked_encoder);
-    } catch (std::exception e) {
+    } catch (std::exception& e) {
         cerr << "Err parse config: " << e.what() << endl;
         return nullptr;
     }
@@ -181,7 +181,7 @@ bool PassengerInfoConverter::Str2Int(const string& str, int& i) const {
     try {
         i = std::stoi(str, nullptr);
         return true;
-    } catch (std::invalid_argument e) {
+    } catch (std::invalid_argument& e) {
         //cerr << "Err: " << e.what() << endl;
         return false;
     }
@@ -191,7 +191,7 @@ bool PassengerInfoConverter::Str2Float(const string& str, float& f) const {
     try {
         f = std::stof(str, nullptr);
         return true;
-    } catch (std::invalid_argument e) {
+    } catch (std::invalid_argument& e) {
         //cerr << "Err: " << e.what() << endl;
         return false;
     }

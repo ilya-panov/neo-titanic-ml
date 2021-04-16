@@ -9,7 +9,7 @@ namespace neotitanicml {
 
 StandartScaler::StandartScaler() {
     mean_.SetAt(0, 0.0);
-    std_deviation_.SetAt(0, 0.0);
+    std_deviation_.SetAt(0, 1.0);
 }
 
 bool StandartScaler::SetMeasures(const vector<float>& mean,

@@ -12,18 +12,18 @@ using std::vector;
 using namespace neotitanicml;
 using namespace NeoML;
 
-namespace neotitanicml
-{
+namespace neotitanicml {
 
 class PassengerInfoConverterTest : public ::testing::Test {
  protected:
-    PassengerInfoConverter converter;
+    std::unique_ptr<PassengerInfoConverter> converter;
 
     void SetUp() override {
         LabelEncoder sex_encoder({"male", "female"});
         LabelEncoder embarked_encoder({"C", "S", "Q"});
-        converter = PassengerInfoConverter(9, 0, 80);
-        converter.SetEncoders(sex_encoder, embarked_encoder);
+        converter = std::unique_ptr<PassengerInfoConverter>(
+            new PassengerInfoConverter(9, 0, 80));
+        converter->SetEncoders(sex_encoder, embarked_encoder);
     }
 };
 
@@ -33,7 +33,7 @@ TEST_F(PassengerInfoConverterTest, FromStrings1) {
 
     PassengerInfo info;
 
-    bool ok = converter.FromStrings(strings, info);
+    bool ok = converter->FromStrings(strings, info);
 
     EXPECT_TRUE(ok);
     EXPECT_EQ(0, info.surviveded);
@@ -52,7 +52,7 @@ TEST_F(PassengerInfoConverterTest, FromStrings2) {
 
     PassengerInfo info;
 
-    bool ok = converter.FromStrings(strings, info);
+    bool ok = converter->FromStrings(strings, info);
 
     EXPECT_TRUE(ok);
     EXPECT_EQ(0, info.surviveded);
@@ -72,7 +72,7 @@ TEST_F(PassengerInfoConverterTest, FromStrings3) {
 
     PassengerInfo info;
 
-    bool ok = converter.FromStrings(strings, info);
+    bool ok = converter->FromStrings(strings, info);
 
     EXPECT_TRUE(ok);
     EXPECT_EQ("S", info.embarked);
@@ -85,7 +85,7 @@ TEST_F(PassengerInfoConverterTest, FromStrings4) {
 
     PassengerInfo info;
 
-    bool ok = converter.FromStrings(strings, info);
+    bool ok = converter->FromStrings(strings, info);
 
     EXPECT_FALSE(ok);
 }
@@ -97,7 +97,7 @@ TEST_F(PassengerInfoConverterTest, FromStrings5) {
 
     PassengerInfo info;
 
-    bool ok = converter.FromStrings(strings, info);
+    bool ok = converter->FromStrings(strings, info);
 
     EXPECT_FALSE(ok);
 }
@@ -109,7 +109,7 @@ TEST_F(PassengerInfoConverterTest, FromStrings6) {
 
     PassengerInfo info;
 
-    bool ok = converter.FromStrings(strings, info);
+    bool ok = converter->FromStrings(strings, info);
 
     EXPECT_FALSE(ok);
 }
@@ -120,7 +120,7 @@ TEST_F(PassengerInfoConverterTest, Validate1) {
 
     PassengerInfo info;
 
-    bool ok = converter.FromStrings(strings, info);
+    bool ok = converter->FromStrings(strings, info);
 
     EXPECT_FALSE(ok);
 }
@@ -131,7 +131,7 @@ TEST_F(PassengerInfoConverterTest, Validate2) {
 
     PassengerInfo info;
 
-    bool ok = converter.FromStrings(strings, info);
+    bool ok = converter->FromStrings(strings, info);
 
     EXPECT_FALSE(ok);
 }
@@ -142,7 +142,7 @@ TEST_F(PassengerInfoConverterTest, Validate3) {
 
     PassengerInfo info;
 
-    bool ok = converter.FromStrings(strings, info);
+    bool ok = converter->FromStrings(strings, info);
 
     EXPECT_FALSE(ok);
 }
@@ -153,12 +153,12 @@ TEST_F(PassengerInfoConverterTest, Info2Vec1) {
 
     PassengerInfo info;
 
-    bool ok = converter.FromStrings(strings, info);
+    bool ok = converter->FromStrings(strings, info);
 
     EXPECT_TRUE(ok);
 
     CSparseFloatVector vect;
-    int class_id = converter.Info2Vec(info, vect);
+    int class_id = converter->Info2Vec(info, vect);
 
     EXPECT_EQ(0, class_id);
 
@@ -177,12 +177,12 @@ TEST_F(PassengerInfoConverterTest, Info2Vec2) {
 
     PassengerInfo info;
 
-    bool ok = converter.FromStrings(strings, info);
+    bool ok = converter->FromStrings(strings, info);
 
     EXPECT_TRUE(ok);
 
     CSparseFloatVector vect;
-    int class_id = converter.Info2Vec(info, vect);
+    int class_id = converter->Info2Vec(info, vect);
 
     EXPECT_EQ(0, class_id);
 
@@ -233,4 +233,4 @@ TEST(PassengerInfoConverter_FromJson, T3) {
     EXPECT_TRUE(ok);
 }
 
-} // namespace neotitanicml
+}  // namespace neotitanicml
